@@ -2,6 +2,7 @@ class Client {
     constructor() {
         this._client = null;
         this.connected = false;
+        this.subscriptions = [];
     }
 
     connect({ host, port, clientId, options }) {
@@ -10,9 +11,9 @@ class Client {
         }
 
         // changing connected state in onSuccess
-        const cached_success = options.onSuccess;
+        const cached_success = options.onSuccess;  // saving the old function body
         options.onSuccess = () => {
-            cached_success();
+            cached_success();  // using the user given function
             this.connected = true;
         }
 
@@ -25,5 +26,22 @@ class Client {
         this._client.disconnect();
         console.log('disconnected');
         this.connected = false;
+    }
+
+    subscribe(topic, options) {
+        // Assigning default options
+        options = Object.assign({
+            qos: 0,
+            timeout: 10,
+            onSuccess: () => {
+                console.log(`subscribed to: ${topic}`);
+            },
+            onFailure: (error) => {
+                alert(error.errorMessage);
+            }
+        }, options);
+
+        // subscribing to topic
+        this._client.subscribe(topic, options);
     }
 }
