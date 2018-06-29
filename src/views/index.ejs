@@ -20,26 +20,41 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header pb-0">
                         <h5 class="card-title" id="connection-status">Connection: offline</h5>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-sm-5 my-2">
+                                <label for="host">Host</label>
                                 <input type="text" class="form-control" id="host-input" placeholder="Host">
                             </div>
                             <div class="col-sm-2 my-2">
+                                <label for="port">Port</label>
                                 <input type="text" class="form-control" id="port-input" placeholder="Port">
                             </div>
                             <div class="col-sm-5 my-2">
+                                <label for="clientId">Client ID</label>
                                 <input type="text" class="form-control" id="client-id-input" placeholder="ClientID">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-2 my-2">
-                                <input type="text" class="form-control" id="keep-alive-input" placeholder="Keep Alive">
-                                <small class="form-text text-muted px-1">Default value: 60</small>
+                            <div class="col-sm-6 my-2">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username-input" placeholder="Username">
                             </div>
-                            <div class="col my-2">
-                                <button type="submit" class="btn btn-primary float-right" id="connect-btn">Connect</button>
+                            <div class="col-sm-6 my-2">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password-input" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 my-2">
+                                <label for="keepalive">Keep Alive</label>
+                                <input type="text" class="form-control" id="keep-alive-input" placeholder="Keep Alive">
+                            </div>
+                            <div class="col my-2 d-flex align-items-end flex-column">
+                                <button type="submit" class="btn btn-primary float-right mt-auto" id="connect-btn">Connect</button>
                             </div>
                         </div>
                     </div>
@@ -48,8 +63,11 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="/js/paho-mqtt-min.js"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>
