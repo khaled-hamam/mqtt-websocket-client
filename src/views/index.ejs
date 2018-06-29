@@ -21,40 +21,44 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h5 class="card-title" id="connection-status">Connection: offline</h5>
+                        <h5 class="card-title" id="connection-status">Connection: offline
+                            <button class="btn btn-link float-right pt-0" data-toggle="collapse" data-target="#connection-body">Collapse</button>
+                        </h5>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-5 my-2">
-                                <label for="host">Host</label>
-                                <input type="text" class="form-control" id="host-input" placeholder="Host">
+                    <div id="connection-body" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-5 my-2">
+                                    <label for="host">Host</label>
+                                    <input type="text" class="form-control" id="host-input" placeholder="Host">
+                                </div>
+                                <div class="col-sm-2 my-2">
+                                    <label for="port">Port</label>
+                                    <input type="text" class="form-control" id="port-input" placeholder="Port">
+                                </div>
+                                <div class="col-sm-5 my-2">
+                                    <label for="clientId">Client ID</label>
+                                    <input type="text" class="form-control" id="client-id-input" placeholder="ClientID">
+                                </div>
                             </div>
-                            <div class="col-sm-2 my-2">
-                                <label for="port">Port</label>
-                                <input type="text" class="form-control" id="port-input" placeholder="Port">
+                            <div class="row">
+                                <div class="col-sm-6 my-2">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username-input" placeholder="Username">
+                                </div>
+                                <div class="col-sm-6 my-2">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password-input" placeholder="Password">
+                                </div>
                             </div>
-                            <div class="col-sm-5 my-2">
-                                <label for="clientId">Client ID</label>
-                                <input type="text" class="form-control" id="client-id-input" placeholder="ClientID">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 my-2">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username-input" placeholder="Username">
-                            </div>
-                            <div class="col-sm-6 my-2">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password-input" placeholder="Password">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-2 my-2">
-                                <label for="keepalive">Keep Alive</label>
-                                <input type="text" class="form-control" id="keep-alive-input" placeholder="Keep Alive">
-                            </div>
-                            <div class="col my-2 d-flex align-items-end flex-column">
-                                <button type="submit" class="btn btn-primary float-right mt-auto" id="connect-btn">Connect</button>
+                            <div class="row">
+                                <div class="col-sm-2 my-2">
+                                    <label for="keepalive">Keep Alive</label>
+                                    <input type="text" class="form-control" id="keep-alive-input" placeholder="Keep Alive">
+                                </div>
+                                <div class="col my-2 d-flex align-items-end flex-column">
+                                    <button type="submit" class="btn btn-primary float-right mt-auto" id="connect-btn">Connect</button>
+                                </div>
                             </div>
                         </div>
                     </div>
