@@ -6,13 +6,23 @@ const connectionStatus = $('#connection-status'),
       keepAlive        = $('#keep-alive-input'),
       userName         = $('#username-input'),
       password         = $('#password-input'),
-      connectBtn       = $('#connect-btn');
+      connectBtn       = $('#connect-btn'),
+      publishTopic     = $('#publish-topic-input'),
+      publishQoS       = $('#publish-qos-input'),
+      message          = $('#message-input'),
+      publishBtn       = $('#pusblish-btn'),
+      subscribeTopic   = $('#subscribe-topic-input'),
+      subscribeQoS     = $('#subscribe-qos-input'),
+      subscribeBtn     = $('#subscribe-btn');
+
 
 // Setting Default Values
 host.val('wss://test.mosquitto.org');
 port.val('8081');
 clientId.val('mqttjs_' + Math.random().toString(16).substr(2, 8));
 keepAlive.val('60');
+publishTopic.val('testtopic/#');
+subscribeTopic.val('testtopic/#');
 
 // Initializing the Client
 const client = new Client();
@@ -62,4 +72,8 @@ connectBtn.on('click', () => {
         clientId: clientId.val(),
         options
     });
+});
+
+subscribeBtn.on('click', () => {
+    client.subscribe(subscribeTopic.val(), { qos: parseInt(subscribeQoS.val()) });
 });
