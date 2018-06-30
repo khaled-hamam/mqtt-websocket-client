@@ -1,0 +1,19 @@
+sudo: false
+language: node_js
+node_js:
+  - stable
+
+sudo: required
+addons:
+  chrome: stable
+
+before_script:
+  - node --version
+  - npm --version
+
+script:
+  - npm test
+
+cache:
+  directories:
+    - "node_modules"
