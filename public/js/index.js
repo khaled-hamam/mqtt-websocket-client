@@ -102,7 +102,10 @@ function unsubscribe(topic) {
     const options = {
         onSuccess: () => {
             console.log(`unsubscribed from: ${topic}`);
+
+            // Refreshing the view
             refreshSubscriptions();
+            refreshMessages();
         }
     };
 
@@ -122,6 +125,16 @@ function refreshSubscriptions() {
                 </div>
             </div>
         `);
+    }
+}
+
+function refreshMessages() {
+    // removing old messages
+    messages.empty();
+
+    // adding the current messages
+    for (let message of client.messages) {
+        messages.append(createMessage(message));
     }
 }
 

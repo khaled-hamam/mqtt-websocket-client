@@ -101,8 +101,13 @@ class Client {
         // removing the topic from subscriptions in onSuccess
         const cached_success = options.onSuccess;  // saving the old function body
         options.onSuccess = () => {
+            // removing the subscription from the array
             const topicIndex = this.subscriptions.findIndex(i => i.topic === topic);
             this.subscriptions.splice(topicIndex, 1);
+
+            // removing the topic messages
+            this.messages = this.messages.filter(message => message.topic !== topic);
+
             cached_success();  // using the user given function
         }
 
