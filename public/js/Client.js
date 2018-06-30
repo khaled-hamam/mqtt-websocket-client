@@ -3,6 +3,7 @@ class Client {
         this._client = null;
         this.connected = false;
         this.subscriptions = [];
+        this.messages = [];
 
         this.onMessageArrived = (message) => {
             console.log(message);
@@ -29,7 +30,19 @@ class Client {
         this._client = new Paho.MQTT.Client(host, port, clientId);
         
         // Setting up Listeners
-        this._client.onMessageArrived = this.onMessageArrived;
+        this._client.onMessageArrived = (message) => {
+            // appending the message
+            this.messages.push({
+                topic: message.topic,
+                qos: message.qos,
+                payloadString: message.payloadString,
+                timestamp: new Date().toLocaleString()
+            });
+
+            // firing the user callback and sending the last message
+            this.onMessageArrived(this.messages[this.messages.length - 1]);
+        }
+
         this._client.onConnectionLost = this.onConnectionLost;
 
         this._client.connect(options);

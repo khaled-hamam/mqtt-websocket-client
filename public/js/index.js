@@ -137,7 +137,7 @@ function createMessage(message) {
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex flex-wrap font-weight-light">
-                        <div class="flex-fill">${new Date().toLocaleString()}</div>
+                        <div class="flex-fill">${message.timestamp}</div>
                         <div class="flex-fill">Topic: ${message.topic}</div>
                         <div class="flex-fill">QoS: ${message.qos}</div>
                     </div>
