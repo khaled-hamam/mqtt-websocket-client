@@ -6,7 +6,7 @@ The project is a task for [XIOT](http://xiot.io) internship.
 
 The application is hosted on **Heroku**, a live version can be found: [here](https://mqtt-websocket-client.herokuapp.com/).
 
-## Pre-requisits:
+## Prerequisites:
 * NodeJS
 * NPM
 * Chrome (to be able to run tests)
@@ -32,5 +32,5 @@ $ npm run start:watch
 $ npm test 
 ```
 
-## Know issues:
+## Known issues:
 - [ ] When unsubscribing from topics with '#' as 'test/#' the messages are not deleted (the exact topic names are deleted).

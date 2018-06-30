@@ -10,7 +10,7 @@ I chose to focus on the main points the real application serves:
     * Retain message option
 
 
-## My though process:
+## My thought process:
 1. Figuring out what is MQTT and it's main terminology.
 2. Understand how the original application of Hivemq is working.
 3. Figuring out tha main libraries and technologies I'm going to use.
