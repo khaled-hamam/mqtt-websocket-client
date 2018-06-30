@@ -50,6 +50,10 @@ client.onMessageArrived = (message) => {
             connectionCircle.removeClass('green');
             connectionCircle.addClass('red');
 
+            // clearing messages and subscriptions from the view
+            messages.empty();
+            subscriptions.empty();
+
             return;
         }
     

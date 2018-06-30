@@ -52,6 +52,8 @@ class Client {
         this._client.disconnect();
         console.log('disconnected');
         this.connected = false;
+        this.messages = [];
+        this.subscriptions = [];
     }
 
     subscribe(topic, options) {
