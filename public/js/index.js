@@ -13,7 +13,8 @@ const connectionStatus = $('#connection-status'),
       publishBtn       = $('#pusblish-btn'),
       subscribeTopic   = $('#subscribe-topic-input'),
       subscribeQoS     = $('#subscribe-qos-input'),
-      subscribeBtn     = $('#subscribe-btn');
+      subscribeBtn     = $('#subscribe-btn'),
+      subscriptions    = $('#subscriptions');
 
 
 // Setting Default Values
@@ -75,5 +76,30 @@ connectBtn.on('click', () => {
 });
 
 subscribeBtn.on('click', () => {
-    client.subscribe(subscribeTopic.val(), { qos: parseInt(subscribeQoS.val()) });
+    // initializing options object
+    const options = {
+        qos: parseInt(subscribeQoS.val()),
+        onSuccess: () => {
+            refreshSubscriptions();
+            console.log(`subscribed to: ${subscribeTopic.val()}`);
+        }
+    }
+
+    client.subscribe(subscribeTopic.val(), options);
 });
+
+function refreshSubscriptions() {
+    // removing old subscriptions
+    subscriptions.empty();
+
+    // adding the current subscriptions
+    for (let subscription of client.subscriptions) {
+        subscriptions.append(`
+            <div class="d-flex flex-column align-items-stretch my-2">
+                <div class="badge badge-pill badge-primary p-2 float-center">
+                    <lead>Topic: ${subscription.topic}  |  QoS: ${subscription.qos}</lead>
+                </div>
+            </div>
+        `);
+    }
+}

@@ -32,7 +32,7 @@ class Client {
         // Assigning default options
         options = Object.assign({
             qos: 0,
-            timeout: 10,
+            timeout: 60,
             onSuccess: () => {
                 console.log(`subscribed to: ${topic}`);
             },
@@ -40,6 +40,13 @@ class Client {
                 alert(error.errorMessage);
             }
         }, options);
+
+        // pushing the new topic to subscriptions in onSuccess
+        const cached_success = options.onSuccess;  // saving the old function body
+        options.onSuccess = () => {
+            this.subscriptions.push({ topic, qos: options.qos });
+            cached_success();  // using the user given function
+        }
 
         // subscribing to topic
         this._client.subscribe(topic, options);
