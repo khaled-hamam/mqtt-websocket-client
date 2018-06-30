@@ -3,6 +3,14 @@ class Client {
         this._client = null;
         this.connected = false;
         this.subscriptions = [];
+
+        this.onMessageArrived = (message) => {
+            console.log(message);
+        }
+
+        this.onConnectionLost = (error) => {
+            console.log(error.errorMessage);
+        }
     }
 
     connect({ host, port, clientId, options }) {
@@ -19,6 +27,11 @@ class Client {
 
         // Creating a new MQTT Client and Connecting to the Broker
         this._client = new Paho.MQTT.Client(host, port, clientId);
+        
+        // Setting up Listeners
+        this._client.onMessageArrived = this.onMessageArrived;
+        this._client.onConnectionLost = this.onConnectionLost;
+
         this._client.connect(options);
     }
 

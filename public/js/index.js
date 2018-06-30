@@ -14,7 +14,8 @@ const connectionStatus = $('#connection-status'),
       subscribeTopic   = $('#subscribe-topic-input'),
       subscribeQoS     = $('#subscribe-qos-input'),
       subscribeBtn     = $('#subscribe-btn'),
-      subscriptions    = $('#subscriptions');
+      subscriptions    = $('#subscriptions'),
+      messages         = $('#messages');
 
 
 // Setting Default Values
@@ -27,6 +28,7 @@ subscribeTopic.val('testtopic/1');
 
 // Initializing the Client
 const client = new Client();
+client.onMessageArrived = onMessageArrived;
 
 // Configuring Buttons Listeners
 connectBtn.on('click', () => {
@@ -116,9 +118,33 @@ function refreshSubscriptions() {
         subscriptions.append(`
             <div class="d-flex flex-column align-items-stretch my-2">
                 <div class="btn badge badge-pill badge-primary p-2" onclick="unsubscribe('${subscription.topic}')">
-                    <lead>Topic: ${subscription.topic}  |  QoS: ${subscription.qos}</lead>
+                    Topic: ${subscription.topic}  |  QoS: ${subscription.qos}
                 </div>
             </div>
         `);
     }
+}
+
+function onMessageArrived(message) {
+    // appending the message to the top of the messages
+    messages.prepend(createMessage(message));
+}
+
+// Creating the message element
+function createMessage(message) {
+    return (`
+        <div class="d-flex flex-column align-items-stretch my-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap font-weight-light">
+                        <div class="flex-fill">${new Date().toLocaleString()}</div>
+                        <div class="flex-fill">Topic: ${message.topic}</div>
+                        <div class="flex-fill">QoS: ${message.qos}</div>
+                    </div>
+                    <hr />
+                    <p class="card-text">${message.payloadString}</p>
+                </div>
+            </div>
+        </div>
+    `);
 }
