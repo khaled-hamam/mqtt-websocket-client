@@ -22,8 +22,8 @@ class Client {
         // changing connected state in onSuccess
         const cached_success = options.onSuccess;  // saving the old function body
         options.onSuccess = () => {
-            cached_success();  // using the user given function
             this.connected = true;
+            cached_success();  // using the user given function
         }
 
         // Creating a new MQTT Client and Connecting to the Broker
