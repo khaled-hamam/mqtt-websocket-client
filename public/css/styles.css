@@ -1,3 +1,18 @@
-header {
-    margin-bottom: 10px;
+.circle {
+    display: inline-block;
+    width: 10pt;
+    height: 10pt;
+    border-radius: 5pt;
+}
+
+.red {
+    background-color: red;
+}
+
+.green {
+    background-color: green;
+}
+
+.message-info {
+    font-size: 10pt;
 }

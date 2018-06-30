@@ -1,5 +1,6 @@
 // DOM Elements
 const connectionStatus = $('#connection-status'),
+      connectionCircle = $('#connection-circle'),
       host             = $('#host-input'),
       port             = $('#port-input'),
       clientId         = $('#client-id-input'),
@@ -28,75 +29,91 @@ subscribeTopic.val('testtopic/1');
 
 // Initializing the Client
 const client = new Client();
-client.onMessageArrived = onMessageArrived;
+client.onMessageArrived = (message) => {
+    // appending the message to the top of the messages
+    messages.prepend(createMessageElement(message));
+};
 
 // Configuring Buttons Listeners
-connectBtn.on('click', () => {
-    // disconnect if already connected
-    if (client.connected) {
-        client.disconnect();
-
-        // changing button and header states
-        connectBtn.text('Connect');
-        connectionStatus.text('offline');
-
-        return;
-    }
-
-    // initializing the Options object
-    const options = {
-        timeout: 3,
-        keepAliveInterval: parseInt(keepAlive.val()),
-        onSuccess: () => {
-            console.log('connected');
-
+(function initializeListeners() {
+    // Connect Button Listener
+    connectBtn.on('click', () => {
+        // disconnect if already connected
+        if (client.connected) {
+            client.disconnect();
+    
             // changing button and header states
-            connectBtn.text('Disconnect');
-            connectionStatus.text('online');
-        },
-        onFailure: (error) => {
-            alert(error.errorMessage);
-        }
-    };
+            connectBtn.text('Connect');
+            connectBtn.removeClass('btn-danger');
+            connectBtn.addClass('btn-primary');
+            connectionStatus.text('offline');
+            connectionCircle.removeClass('green');
+            connectionCircle.addClass('red');
 
-    // Checking the username and password
-    if (userName.val()) {
-        options = {
-            ...options,
-            userName: userName.val(),
-            password: password.val()
+            return;
+        }
+    
+        // initializing the Options object
+        const options = {
+            timeout: 3,
+            keepAliveInterval: parseInt(keepAlive.val()),
+            onSuccess: () => {
+                console.log('connected');
+    
+                // changing button and header states
+                connectBtn.text('Disconnect');
+                connectBtn.removeClass('btn-primary');
+                connectBtn.addClass('btn-danger');
+                connectionStatus.text('online');
+                connectionCircle.removeClass('red');
+                connectionCircle.addClass('green');
+            },
+            onFailure: (error) => {
+                alert(error.errorMessage);
+            }
         };
-    }
-
-    // Connecting
-    client.connect({
-        host: host.val(),
-        port: parseInt(port.val()),
-        clientId: clientId.val(),
-        options
-    });
-});
-
-subscribeBtn.on('click', () => {
-    // initializing options object
-    const options = {
-        qos: parseInt(subscribeQoS.val()),
-        onSuccess: () => {
-            refreshSubscriptions();
-            console.log(`subscribed to: ${subscribeTopic.val()}`);
+    
+        // Checking the username and password
+        if (userName.val()) {
+            options = {
+                ...options,
+                userName: userName.val(),
+                password: password.val()
+            };
         }
-    }
-
-    client.subscribe(subscribeTopic.val(), options);
-});
-
-publishBtn.on('click', () => {
-    client.publish({
-        topic: publishTopic.val(),
-        qos: parseInt(publishQoS.val()),
-        payload: message.val()
+    
+        // Connecting
+        client.connect({
+            host: host.val(),
+            port: parseInt(port.val()),
+            clientId: clientId.val(),
+            options
+        });
     });
-});
+    
+    // Subscribe Button Listener
+    subscribeBtn.on('click', () => {
+        // initializing options object
+        const options = {
+            qos: parseInt(subscribeQoS.val()),
+            onSuccess: () => {
+                refreshSubscriptions();
+                console.log(`subscribed to: ${subscribeTopic.val()}`);
+            }
+        }
+    
+        client.subscribe(subscribeTopic.val(), options);
+    });
+    
+    // Publish Button Listener
+    publishBtn.on('click', () => {
+        client.publish({
+            topic: publishTopic.val(),
+            qos: parseInt(publishQoS.val()),
+            payload: message.val()
+        });
+    });
+})();
 
 function unsubscribe(topic) {
     const options = {
@@ -112,51 +129,53 @@ function unsubscribe(topic) {
     client.unsubscribe(topic, options);
 }
 
+// Rerendering the subscriptions view
 function refreshSubscriptions() {
     // removing old subscriptions
     subscriptions.empty();
 
     // adding the current subscriptions
     for (let subscription of client.subscriptions) {
-        subscriptions.append(`
-            <div class="d-flex flex-column align-items-stretch my-2">
-                <div class="btn badge badge-pill badge-primary p-2" onclick="unsubscribe('${subscription.topic}')">
-                    Topic: ${subscription.topic}  |  QoS: ${subscription.qos}
-                </div>
-            </div>
-        `);
+        subscriptions.append(createSubscriptionElement(subscription));
     }
 }
 
+// Rerendering the messages view
 function refreshMessages() {
     // removing old messages
     messages.empty();
 
     // adding the current messages
     for (let message of client.messages) {
-        messages.append(createMessage(message));
+        messages.append(createMessageElement(message));
     }
 }
 
-function onMessageArrived(message) {
-    // appending the message to the top of the messages
-    messages.prepend(createMessage(message));
-}
-
 // Creating the message element
-function createMessage(message) {
+function createMessageElement(message) {
     return (`
         <div class="d-flex flex-column align-items-stretch my-2">
             <div class="card">
                 <div class="card-body">
-                    <div class="d-flex flex-wrap font-weight-light">
+                    <div class="d-flex flex-wrap font-weight-light message-info">
                         <div class="flex-fill">${message.timestamp}</div>
-                        <div class="flex-fill">Topic: ${message.topic}</div>
-                        <div class="flex-fill">QoS: ${message.qos}</div>
+                        <div class="flex-fill"><b>Topic:</b> ${message.topic}</div>
+                        <div class="flex-fill"><b>QoS:</b> ${message.qos}</div>
                     </div>
                     <hr />
                     <p class="card-text">${message.payloadString}</p>
                 </div>
+            </div>
+        </div>
+    `);
+}
+
+// Creating the subscriptionElement
+function createSubscriptionElement(subscription) {
+    return (`
+        <div class="d-flex flex-column align-items-stretch my-2">
+            <div class="btn badge badge-pill badge-primary p-2" onclick="unsubscribe('${subscription.topic}')">
+                Topic: ${subscription.topic}  |  QoS: ${subscription.qos}
             </div>
         </div>
     `);
