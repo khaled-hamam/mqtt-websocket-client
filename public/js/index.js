@@ -10,7 +10,7 @@ const connectionStatus = $('#connection-status'),
       publishTopic     = $('#publish-topic-input'),
       publishQoS       = $('#publish-qos-input'),
       message          = $('#message-input'),
-      publishBtn       = $('#pusblish-btn'),
+      publishBtn       = $('#publish-btn'),
       subscribeTopic   = $('#subscribe-topic-input'),
       subscribeQoS     = $('#subscribe-qos-input'),
       subscribeBtn     = $('#subscribe-btn'),
@@ -86,6 +86,14 @@ subscribeBtn.on('click', () => {
     }
 
     client.subscribe(subscribeTopic.val(), options);
+});
+
+publishBtn.on('click', () => {
+    client.publish({
+        topic: publishTopic.val(),
+        qos: parseInt(publishQoS.val()),
+        payload: message.val()
+    });
 });
 
 function unsubscribe(topic) {

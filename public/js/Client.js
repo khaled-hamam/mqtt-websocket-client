@@ -81,5 +81,13 @@ class Client {
         }
 
         this._client.unsubscribe(topic, options);        
-    } 
+    }
+
+    publish({ topic, qos, payload }) {
+        let message = new Paho.MQTT.Message(payload);
+        message.destinationName = topic;
+        message.qos = qos;
+
+        this._client.send(message);
+    }
 }
