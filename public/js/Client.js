@@ -29,6 +29,14 @@ class Client {
     }
 
     subscribe(topic, options) {
+        // checking duplicate subscriptions
+        for (let subscription of this.subscriptions) {
+            if (subscription.topic === topic) {
+                alert('You are already subscribed to this topic');
+                return;
+            }
+        }
+
         // Assigning default options
         options = Object.assign({
             qos: 0,
@@ -51,4 +59,27 @@ class Client {
         // subscribing to topic
         this._client.subscribe(topic, options);
     }
+
+    unsubscribe(topic, options) {
+        // assigning default options
+        options = Object.assign({
+            onSuccess: () => {
+                console.log(`unsubscribed from: ${topic}`);
+            },
+            onFailure: (error) => {
+                alert(error.errorMessage);
+            },
+            timeout: 10
+        }, options);
+
+        // removing the topic from subscriptions in onSuccess
+        const cached_success = options.onSuccess;  // saving the old function body
+        options.onSuccess = () => {
+            const topicIndex = this.subscriptions.findIndex(i => i.topic === topic);
+            this.subscriptions.splice(topicIndex, 1);
+            cached_success();  // using the user given function
+        }
+
+        this._client.unsubscribe(topic, options);        
+    } 
 }

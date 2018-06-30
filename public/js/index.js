@@ -22,8 +22,8 @@ host.val('wss://test.mosquitto.org');
 port.val('8081');
 clientId.val('mqttjs_' + Math.random().toString(16).substr(2, 8));
 keepAlive.val('60');
-publishTopic.val('testtopic/#');
-subscribeTopic.val('testtopic/#');
+publishTopic.val('testtopic/1');
+subscribeTopic.val('testtopic/1');
 
 // Initializing the Client
 const client = new Client();
@@ -88,6 +88,17 @@ subscribeBtn.on('click', () => {
     client.subscribe(subscribeTopic.val(), options);
 });
 
+function unsubscribe(topic) {
+    const options = {
+        onSuccess: () => {
+            console.log(`unsubscribed from: ${topic}`);
+            refreshSubscriptions();
+        }
+    };
+
+    client.unsubscribe(topic, options);
+}
+
 function refreshSubscriptions() {
     // removing old subscriptions
     subscriptions.empty();
@@ -96,7 +107,7 @@ function refreshSubscriptions() {
     for (let subscription of client.subscriptions) {
         subscriptions.append(`
             <div class="d-flex flex-column align-items-stretch my-2">
-                <div class="badge badge-pill badge-primary p-2 float-center">
+                <div class="btn badge badge-pill badge-primary p-2" onclick="unsubscribe('${subscription.topic}')">
                     <lead>Topic: ${subscription.topic}  |  QoS: ${subscription.qos}</lead>
                 </div>
             </div>
