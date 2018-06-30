@@ -32,15 +32,15 @@ class Client {
         // Setting up Listeners
         this._client.onMessageArrived = (message) => {
             // appending the message
-            this.messages.push({
+            this.messages = [{
                 topic: message.topic,
                 qos: message.qos,
                 payloadString: message.payloadString,
                 timestamp: new Date().toLocaleString()
-            });
+            }, ...this.messages];
 
-            // firing the user callback and sending the last message
-            this.onMessageArrived(this.messages[this.messages.length - 1]);
+            // firing the user callback and sending the last inserted message
+            this.onMessageArrived(this.messages[0]);
         }
 
         this._client.onConnectionLost = this.onConnectionLost;
